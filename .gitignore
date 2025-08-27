@@ -6,3 +6,5 @@ ref
 __pycache__
 .venv
 .pytest_cache
+requirements.txt
+.vscode
