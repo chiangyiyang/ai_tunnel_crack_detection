@@ -6,7 +6,7 @@ import argparse
 import mimetypes
 from pathlib import Path
 from typing import List, Tuple, Optional, Any
-from PIL import Image
+from PIL import Image, ImageOps
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from google import genai
@@ -167,7 +167,10 @@ def process_single(client: Any, img_path: Path, out_dir: Path, min_conf: float) 
         print("Failed to parse model output as JSON:", e)
         detections = []
 
+    # 開啟影像後立即套用 EXIF 轉正，並確保為 RGB 模式以避免 matplotlib 顯示問題
     image = Image.open(img_path)
+    image = ImageOps.exif_transpose(image)
+    image = image.convert("RGB")
     w, h = image.size
     filtered = normalize_and_filter_detections(detections, (w, h), min_conf)
 
